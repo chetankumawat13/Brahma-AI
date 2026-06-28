@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { sendEmail } from "../services/mail.services.js"
 dotenv.config()
-import crypto from 'crypto'
+
 
 
 export async function registerController(req,res){
@@ -62,6 +62,62 @@ export async function registerController(req,res){
 
 }
 
+
+export async function loginController(req,res){
+    const {email,password} = req.body
+
+    const user = userModel.findOne({email})
+
+    if(!user){
+        return res.status(400).json({
+            message:"Invalid email or password",
+            success:false,
+            error:"User not found"
+        })
+    }
+
+    const isPasswordMarch = await user.comparePassword(password);
+
+    if(!isPasswordMarch){
+        return res.status(400).json({
+            message:"Invalid email or password",
+            success:false,
+            error:"Incorrect password"
+        })
+    }
+
+
+    if(!user.verified){
+        return res.status(400).json({
+            message:"Please verify your email before logging in",
+            success:false,
+            error:"Email Not Verified"
+        })
+    }
+
+    const token = jwt.sign(
+        {
+            id:user._id,
+            username:user.username
+        },
+        process.env.JWT_SECRET,
+    )
+
+    res.cookie("token",token)
+
+    res.status(200).json({
+        message:"User logged in Successfully",
+        success:true,
+        user:{
+            id:user._id,
+            username:user.username,
+            email:user.email
+        }
+    })
+
+}
+
+
 export async function verifyEmailController(req,res){
     const {token} = req.query
     try{
@@ -74,6 +130,13 @@ export async function verifyEmailController(req,res){
                 success:false,
                 err:"User not found"
             })
+        }
+
+        if(user.verified){
+            return res.status(400).send(`
+                <h1>Email Already Verified</h1>
+               <p>This verified link expired </p>
+            `)
         }
 
         user.verified = true
