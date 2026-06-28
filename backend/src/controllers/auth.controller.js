@@ -66,7 +66,7 @@ export async function registerController(req,res){
 export async function loginController(req,res){
     const {email,password} = req.body
 
-    const user = userModel.findOne({email})
+    const user = await userModel.findOne({email})
 
     if(!user){
         return res.status(400).json({
@@ -76,9 +76,9 @@ export async function loginController(req,res){
         })
     }
 
-    const isPasswordMarch = await user.comparePassword(password);
+    const isPasswordMatch = await user.comparePassword(password);
 
-    if(!isPasswordMarch){
+    if(!isPasswordMatch){
         return res.status(400).json({
             message:"Invalid email or password",
             success:false,
