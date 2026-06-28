@@ -61,3 +61,87 @@ export async function registerController(req,res){
     });
 
 }
+
+export async function verifyEmailController(req,res){
+    const {token} = req.query
+    try{
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        const user = await userModel.findOne({email:decoded.email})
+
+        if(!user){
+            return res.status(400).json({
+                message:"Invalid Token",
+                success:false,
+                err:"User not found"
+            })
+        }
+
+        user.verified = true
+
+        await user.save()
+
+
+        const html = `
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Verified</title>
+</head>
+
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;display:flex;justify-content:center;align-items:center;height:100vh;">
+
+<div style="background:#fff;padding:45px 35px;border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.12);text-align:center;max-width:420px;width:90%;">
+
+    <div style="width:80px;height:80px;margin:0 auto 20px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;">
+        
+    </div>
+
+    <h1 style="margin:0;color:#111;font-size:30px;">
+        Email Verified!
+    </h1>
+
+    <p style="margin:18px 0 30px;color:#666;font-size:16px;line-height:1.6;">
+        Congratulations! Your email has been successfully verified.
+        You can now log in and start using your account.
+    </p>
+
+    <a
+        href="http://localhost:3000/api/auth/login"
+        style="
+            display:inline-block;
+            text-decoration:none;
+            background:#0baeb1;
+            color:white;
+            padding:14px 34px;
+            border-radius:10px;
+            font-size:16px;
+            font-weight:600;
+            transition:.3s;
+        "
+    >
+        Go to Login →
+    </a>
+
+    <p style="margin-top:25px;color:#999;font-size:13px;">
+        Thank you for verifying your email.
+    </p>
+
+</div>
+
+</body>
+</html>
+        `
+
+        return res.send(html)
+    
+    }catch(err){
+        return res.status(400).json({
+            message:"Invalid ad expired token",
+            success:false,
+            err:err.message
+
+        })
+    }
+}
