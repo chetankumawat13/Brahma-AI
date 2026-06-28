@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Brahma-Bold';
+    src: url('/fonts/ClashDisplay-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Brahma-Regular';
+    src: url('/fonts/ClashDisplay-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Brahma-Medium';
+    src: url('/fonts/ClashDisplay-Medium.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Brahma-Light';
+    src: url('/fonts/ClashDisplay-Light.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Brahma-ExtraBold';
+    src: url('/fonts/ClashDisplay-ExtraBold.ttf') format('truetype');
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
