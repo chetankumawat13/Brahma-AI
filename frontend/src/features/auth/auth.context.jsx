@@ -10,12 +10,21 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         async function checkAuth(){
-            const user = await getMe()
-            setUser(user)
-            setLoading(false)
+
+            try{
+                const user = await getMe()
+                setUser(user)
+            }
+            catch(err){
+                setUser(null)
+            }finally{
+                setLoading(false)
+            }
+        
         }
 
         checkAuth()
+
     },[])
 
 
