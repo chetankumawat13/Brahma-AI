@@ -3,6 +3,7 @@ import AuthLayout from '../layout/AuthLayout'
 import Login from '../features/auth/pages/Login'
 import Register from '../features/auth/pages/Register'
 import Dashboard from '../features/chat/pages/Dashboard'
+import ProtectedRoute from './ProtectedRoute'
 
 
 
@@ -21,7 +22,12 @@ export const MainRouter = createBrowserRouter([
         ]
     },
     {
-        path:'/',
-        element:<Dashboard />
+        element:<ProtectedRoute />,
+        children:[
+            {
+                path:'/',
+                element:<Dashboard />
+            }
+        ]
     }
 ])

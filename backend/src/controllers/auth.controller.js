@@ -233,3 +233,7 @@ export async function verifyEmailController(req,res){
         })
     }
 }
+
+export async function resendEmailController(req,res){
+    
+}

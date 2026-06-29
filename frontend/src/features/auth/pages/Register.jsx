@@ -7,6 +7,8 @@ const Register = () => {
   const [canResend, setCanResend] = useState(false);
   const [timer, setTimer] = useState(30);
 
+
+
   useEffect(() => {
     if (step !== 3) return;
     if (canResend) return;

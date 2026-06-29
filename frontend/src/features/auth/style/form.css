@@ -167,6 +167,7 @@
             font-family: 'Brahma-Regular';
             text-align: center;
             color: var(--text-primary-color);
+            margin: 0;
         }
         a{
             color: var(--bg-active-color);
