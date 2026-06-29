@@ -102,6 +102,8 @@
             font-size: var(--font-size-md);
             font-family: 'Brahma-Regular';
             text-align: center;
+            display: flex;
+            gap: var(--gutter-sm);
             a{
                 color: var(--bg-active-color);
                 text-decoration: none;
