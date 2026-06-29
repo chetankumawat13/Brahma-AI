@@ -113,6 +113,59 @@
         }
     }
 
+    .verify-email{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.7rem;
+
+        .verify-icon{
+            i{
+                font-size: var(--font-size-xl);
+                color: var(--bg-active-color);
+            }
+        }
+
+        h3{
+            font-size: var(--font-size-lg);
+            font-family: 'Brahma-Regular';
+        }
+        p{
+            font-size: var(--font-size-md);
+            font-family: 'Brahma-Regular';
+            text-align: center;
+        }
+        span{
+            font-size: var(--font-size-md);
+            font-family: 'Brahma-Medium';
+            text-align: center;
+            color: var(--bg-active-color);
+        }
+
+        button{
+            margin-top: var(--margin-md);
+        }
+        button:disabled{
+            background-color: var(--bg-tertiary-color);
+            color: var(--text-tertiary-color);
+            cursor: not-allowed;
+        }
+
+        small{
+            font-size: var(--font-size-sm);
+            font-family: 'Brahma-Regular';
+            text-align: center;
+            color: var(--text-primary-color);
+        }
+        a{
+            color: var(--bg-active-color);
+            font-size: var(--font-size-base);
+            font-family: 'Brahma-Medium';
+            margin-top: var(--margin-md);
+        }
+    }
+
 
 
 }
