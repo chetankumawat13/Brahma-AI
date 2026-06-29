@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { loginValidator, registerValidator } from "../validators/auth.validator.js";
-import { loginController, registerController, verifyEmailController } from "../controllers/auth.controller.js";
+import {  getMeController, loginController, registerController, verifyEmailController } from "../controllers/auth.controller.js";
+import identifyUser from "../middlewares/auth.middleware.js";
 
 
 
@@ -13,6 +14,8 @@ authRouter.post('/register',registerValidator,registerController)
 
 authRouter.post('/login',loginValidator,loginController)
 
+
+authRouter.get('/get-me',identifyUser,getMeController)
 
 authRouter.get('/verify-email',verifyEmailController)
 

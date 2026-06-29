@@ -117,6 +117,31 @@ export async function loginController(req,res){
 
 }
 
+export async function getMeController(req,res){
+    const username = req.user.username
+
+    if(!username){
+        return res.status(404).json({
+            message:"user not found",
+            success:false,
+            err:"user not found"
+        })
+    }
+
+    const user = await userModel.findOne({username:username})
+
+    res.status(200).json({
+        message:"user fetched successfully",
+        success:true,
+        user:{
+            username:user.username,
+            email:user.email
+        }
+    })
+
+
+}
+
 
 export async function verifyEmailController(req,res){
     const {token} = req.query
