@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import TopBar from "../components/TopBar";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
   const [step, setStep] = useState(1);
   const [canResend, setCanResend] = useState(false);
   const [timer, setTimer] = useState(30);
 
-
+  const {user,loading,handleRegister} = useAuth()
+  const {handleSubmit,register} = useForm()
+  const [error, setError] = useState('')
+  const navigate =  useNavigate()
 
   useEffect(() => {
     if (step !== 3) return;
@@ -33,21 +38,35 @@ const Register = () => {
     setCanResend(false);
   };
 
+  const handleSubmitRegister = async (data) => {
+        try{
+            setError('')
+            await handleRegister(data.email,data.username,data.password)
+            setStep(3)
+        }catch(err){
+            const message = err.response?.data.message
+            setError(message)
+        }
+  }
+
+
   return (
     <div className="form-container">
       <TopBar />
-      <form action="">
+
+      <form onSubmit={handleSubmit(handleSubmitRegister)} action="">
         {step === 1 && (
           <>
-            <div className="form-title">
+              <div className="form-title">
               <h4>Create Account</h4>
             </div>
+            <small>{error && `${error}`}</small>
             <div className="input-box">
-              <input type="email" id="email" placeholder="" />
+              <input {...register('email')} type="email" id="email" placeholder="" />
               <label htmlFor="email">Email address</label>
             </div>
             <div className="input-box">
-              <input type="password" id="password" placeholder="" />
+              <input {...register("password")} type="password" id="password" placeholder="" />
               <label htmlFor="password">Password</label>
             </div>
             <button onClick={() => setStep(2)} type="button">
@@ -60,16 +79,19 @@ const Register = () => {
         )}
         {step === 2 && (
           <>
-            <div className="form-title">
+                <div className="form-title">
               <h4>Create Account</h4>
             </div>
+            <small>{error && `${error}`}</small>
+
             <div className="input-box">
-              <input type="text" id="username" placeholder="" />
+              <input {...register("username")} type="text" id="username" placeholder="" />
               <label htmlFor="username">Username</label>
             </div>
-            <button onClick={() => setStep(3)} type="submit">
-              Create Account
+            <button  type="submit">
+                {loading?"Creating...":"Create Account"}
             </button>
+            <button type="button" onClick={() => setStep(1)} className="back-btn">Back</button>
             <p>
               Already have an account <Link to={"/login"}>Login</Link>
             </p>

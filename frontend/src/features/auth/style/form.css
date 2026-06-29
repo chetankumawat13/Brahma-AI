@@ -53,6 +53,15 @@
         gap: var(--gutter-lg);
         margin-top: var(--margin-lg);
 
+        .form-title{
+            width: 100%;
+            margin-top: 0.3rem;
+            h4{
+                font-size: var(--font-size-xl);
+                font-family: 'Brahma-Regular';
+            }
+        }
+
 
         small{
             color: var(--text-danger-color);
@@ -106,6 +115,14 @@
             font-size: var(--font-size-md);
             font-family: 'Brahma-Regular';
             cursor: pointer;
+        }
+
+        .back-btn{
+            background-color: var(--bg-tertiary-color);
+            color: var(--text-primary-color);
+            width: 100%;
+            font-size: var(--font-size-md);
+
         }
 
         p{
@@ -180,3 +197,4 @@
 
 
 }
+
