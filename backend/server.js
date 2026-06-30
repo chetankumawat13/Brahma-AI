@@ -1,12 +1,14 @@
 import app from "./src/app.js";
 import { createServer } from "http";
-import {Server} from 'socket.io'
 import connectToDB from "./src/config/database.js";
+import http from 'http'
 import dotenv from 'dotenv'
-import { testAi } from "./src/services/ai.service.js";
+import { initSocket } from "./src/sockets/server.socket.js";
 dotenv.config()
 
-const httpServer = createServer(app)
+const httpServer =  http.createServer(app)
+
+initSocket(httpServer)
 
 connectToDB()
 
