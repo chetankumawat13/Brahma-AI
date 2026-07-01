@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import { useChat } from '../hooks/useChat'
+import SideBar from '../components/SideBar'
+import ChatWindow from '../components/ChatWindow'
 
 const Dashboard = () => {
 
@@ -10,7 +12,10 @@ const Dashboard = () => {
     },[ ])
 
   return (
-    <div>Dashboard</div>
+    <div className='chat-layout'>
+        <SideBar />
+        <ChatWindow />
+    </div>
   )
 }
 
