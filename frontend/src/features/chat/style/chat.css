@@ -1,0 +1,78 @@
+.chat-layout{
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar{
+    width: 280px;
+    background-color: var(--bg-secondary-color);
+    padding: 20px;
+    border-right: 1px solid #abaaaa;
+}
+
+.chat-window{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-primary-color);
+}
+
+.chat-header{
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--padding-lg);
+}
+
+.chat-header h2{
+    font-size: var(--font-size-lg);
+    color: var(--text-color);
+    font-family: "Brahma-Medium";
+}
+
+.empty-chat{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gutter-lg);
+}
+
+
+.empty-chat h1{
+    font-size: var(--font-size-lg);
+    color: var(--text-color);
+    font-family: "Brahma-Regular";
+}
+
+.prompt-box{
+    width: 67%;
+    display: flex;
+    border: 1px solid #abaaaa;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+
+    input{
+        flex: 1;
+        border: none;
+        padding: var(--padding-md);
+        font-size: var(--font-size-md);
+        font-family: "Brahma-Regular";
+
+        &:focus{
+            outline: none;
+        }
+
+    }
+
+    button{
+        border: none;
+        font-size: var(--font-size-md);
+        font-family: "Brahma-Medium";
+        cursor: pointer;
+        width: 70px;
+        background-color: var(--bg-active-color);
+        color: var(--text-active-color);
+    }
+}
