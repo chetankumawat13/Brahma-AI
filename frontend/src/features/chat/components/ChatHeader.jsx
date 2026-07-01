@@ -2,7 +2,9 @@ import React from 'react'
 
 const ChatHeader = () => {
   return (
-    <div>ChatHeader</div>
+    <header className='chat-header'>
+        <h2>Brahma-AI</h2>
+    </header>
   )
 }
 
