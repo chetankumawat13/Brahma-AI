@@ -2,7 +2,7 @@ import React from 'react'
 
 const NewChatButton = () => {
   return (
-    <button>
+    <button className='new-chat'>
         <i className="ri-add-line"></i>
         New chat 
     </button>

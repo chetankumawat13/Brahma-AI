@@ -5,7 +5,7 @@ const RecentChats = () => {
   const dummyChats = [
     {
       id: 1,
-      title: "Progressive Web Apps",
+      title: "Progressive Web Apps Progressive Web Apps",
     },
     {
       id: 2,
@@ -19,10 +19,42 @@ const RecentChats = () => {
       id: 4,
       title: "Express Middleware",
     },
+    {
+        id: 1,
+        title: "Progressive Web Apps",
+      },
+      {
+        id: 2,
+        title: "React Hooks",
+      },
+      {
+        id: 3,
+        title: "MongoDB",
+      },
+      {
+        id: 4,
+        title: "Express Middleware",
+      },
+      {
+        id: 1,
+        title: "Progressive Web Apps",
+      },
+      {
+        id: 2,
+        title: "React Hooks",
+      },
+      {
+        id: 3,
+        title: "MongoDB",
+      },
+      {
+        id: 4,
+        title: "Express Middleware",
+      },
   ];
 
   return <div className="recent-chats">
-        <h4>Recent</h4>
+        <h4>Recents</h4>
         {
             dummyChats.map(chat => (
                 <ChatItem key={chat.id} chat={chat} />

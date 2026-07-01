@@ -2,12 +2,10 @@ import React from 'react'
 
 const SearchChat = () => {
   return (
-    <div className='search-chat'>
-        <button>
+        <button className='search-chat'>
              <i className="ri-search-line"></i>
              Search chats
         </button>
-    </div>
   )
 }
 
