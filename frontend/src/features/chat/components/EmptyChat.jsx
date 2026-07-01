@@ -1,8 +1,12 @@
 import React from 'react'
+import PromptBox from './PromptBox'
 
 const EmptyChat = () => {
   return (
-    <div>EmptyChat</div>
+    <section className='empty-chat'>
+        <h1>What's on your mind today?</h1>
+        <PromptBox />
+    </section>
   )
 }
 

@@ -2,7 +2,10 @@ import React from 'react'
 
 const PromptBox = () => {
   return (
-    <div>PromptBox</div>
+    <div className='prompt-box'>
+        <input type="text" placeholder='Ask Anything' />
+        <button>send</button>
+    </div>
   )
 }
 
