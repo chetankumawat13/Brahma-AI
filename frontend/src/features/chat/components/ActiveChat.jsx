@@ -1,6 +1,7 @@
 import React from 'react'
 import MessageList from './MessageList'
 import PromptBox from './PromptBox'
+import ChatHeader from './ChatHeader'
 
 const ActiveChat = () => {
   return (

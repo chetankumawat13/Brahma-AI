@@ -5,7 +5,7 @@ import ActiveChat from './ActiveChat';
 
 const ChatWindow = () => {
 
-  const [currentChat, setCurrentChat] = useState(null);
+  const [currentChat, setCurrentChat] = useState(true);
 
   return (
     <main className='chat-window'>

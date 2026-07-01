@@ -182,6 +182,22 @@
     gap: var(--gutter-lg);
 }
 
+.active-chat{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gutter-lg);
+
+    .message-list{
+        flex: 1;
+        overflow-y: auto;
+        width: 100%;
+        padding: var(--padding-lg);
+
+    }
+
+}
 
 .empty-chat h1{
     font-size: var(--font-size-lg);
@@ -193,15 +209,17 @@
     width: 67%;
     display: flex;
     border: 1px solid #abaaaa;
-    border-radius: var(--border-radius-lg);
+    border-radius: 50px;
     overflow: hidden;
+    padding: 0.34rem;
 
     input{
         flex: 1;
         border: none;
-        padding: var(--padding-md);
+        padding: 0 var(--padding-md);
         font-size: var(--font-size-md);
         font-family: "Brahma-Regular";
+        outline: none;
 
         &:focus{
             outline: none;
@@ -214,9 +232,19 @@
         font-size: var(--font-size-md);
         font-family: "Brahma-Medium";
         cursor: pointer;
-        width: 70px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background-color: var(--bg-active-color);
         color: var(--text-active-color);
+        
+
+        i{
+            font-size: 1.1rem;
+        }
     }
 }
 
