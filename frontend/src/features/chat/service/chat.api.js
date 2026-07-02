@@ -7,12 +7,12 @@ const api = axios.create({
 
 
 export async function getChats(){
-    const response = api.get("chats")
+    const response = await api.get("chats")
     return response.data.chats
 }
 
 export async function getMessages(chatId){
-    const response = api.get(`/chats/${chatId}/messages`);
+    const response = await api.get(`/chats/${chatId}/messages`);
     return response.data.messages
 }
 

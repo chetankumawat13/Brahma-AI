@@ -1,63 +1,23 @@
 import React from "react";
 import ChatItem from "./ChatItem";
+import { useChat } from "../hooks/useChat";
 
 const RecentChats = () => {
-  const dummyChats = [
-    {
-      id: 1,
-      title: "Progressive Web Apps Progressive Web Apps",
-    },
-    {
-      id: 2,
-      title: "React Hooks",
-    },
-    {
-      id: 3,
-      title: "MongoDB",
-    },
-    {
-      id: 4,
-      title: "Express Middleware",
-    },
-    {
-        id: 1,
-        title: "Progressive Web Apps",
-      },
-      {
-        id: 2,
-        title: "React Hooks",
-      },
-      {
-        id: 3,
-        title: "MongoDB",
-      },
-      {
-        id: 4,
-        title: "Express Middleware",
-      },
-      {
-        id: 1,
-        title: "Progressive Web Apps",
-      },
-      {
-        id: 2,
-        title: "React Hooks",
-      },
-      {
-        id: 3,
-        title: "MongoDB",
-      },
-      {
-        id: 4,
-        title: "Express Middleware",
-      },
-  ];
+
+
+  const {chats,loadChats,loadingChats} = useChat()
+
+  if(loadingChats){
+      return (
+         <h4>Loading</h4>
+      )
+  }
 
   return <div className="recent-chats">
         <h4>Recents</h4>
         {
-            dummyChats.map(chat => (
-                <ChatItem key={chat.id} chat={chat} />
+            chats.map(chat => (
+                <ChatItem key={chat._id} chat={chat} />
             ))
         } 
   </div>;
