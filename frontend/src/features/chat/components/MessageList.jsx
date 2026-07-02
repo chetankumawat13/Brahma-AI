@@ -1,14 +1,18 @@
 import React from 'react'
 import { useChat } from '../hooks/useChat'
+import Message from './Message';
 
 const MessageList = () => {
   
 
   const {currentChat,messagesByChat,loadingMessages} = useChat()
 
-  const messages = messagesByChat?.[currentChat._id] || []
+  if(!currentChat) return null;
 
+  const chatData = messagesByChat?.[currentChat._id] || []
+  const messages = chatData?.messages || []
 
+  
   if(loadingMessages){
     return (
        <h4>Loading...</h4>
@@ -17,7 +21,11 @@ const MessageList = () => {
 
   return (
     <div className='message-list'>
-      {messages.length}
+        {
+          messages.map(message => (
+            <Message key={message._id} message={message} />
+          ))
+        }
     </div>
   )
 }
