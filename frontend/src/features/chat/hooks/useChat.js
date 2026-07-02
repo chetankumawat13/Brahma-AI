@@ -8,7 +8,7 @@ import { getChats, getMessages } from "../service/chat.api";
 export const useChat = () => {
 
     const context = useContext(ChatContext)
-    const {loadingChats,setLoadingChats,chats,setChats,currentChat,setCurrentChat,messageByChat,setLoadingMessages,setMessageByChat} = context
+    const {loadingChats,setLoadingChats,chats,setChats,currentChat,setCurrentChat,messagesByChat,setLoadingMessages,setMessagesByChat} = context
 
 
     const loadChats = async () => {
@@ -26,7 +26,7 @@ export const useChat = () => {
     const selectChat = async (chat) => {
         setCurrentChat(chat)
 
-        if(messageByChat[chat._id]){
+        if(messagesByChat[chat._id]){
             return
         }
 
@@ -34,7 +34,7 @@ export const useChat = () => {
             setLoadingMessages(true)
            const messages = await getMessages(chat._id)
 
-           setMessageByChat(prev =>({
+           setMessagesByChat(prev =>({
              ...prev,
              [chat._id]:messages
            }) )
@@ -71,6 +71,6 @@ export const useChat = () => {
 
 
     return {
-        initializeSocketConnection,loadChats,chats,loadingChats,selectChat,currentChat
+        initializeSocketConnection,loadChats,chats,loadingChats,selectChat,currentChat,messagesByChat
     }
 }
