@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import ChatHeader from './ChatHeader'
 import EmptyChat from './EmptyChat'
 import ActiveChat from './ActiveChat';
+import { useChat } from '../hooks/useChat';
 
 const ChatWindow = () => {
 
-  const [currentChat, setCurrentChat] = useState(true);
+
+  const {currentChat} = useChat()
 
   return (
     <main className='chat-window'>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "../hooks/useChat";
 
@@ -6,6 +6,9 @@ const RecentChats = () => {
 
 
   const {chats,loadChats,loadingChats} = useChat()
+  useEffect(() => {
+    loadChats()
+},[])
 
   if(loadingChats){
       return (

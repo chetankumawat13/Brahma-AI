@@ -23,10 +23,6 @@ export const useChat = () => {
         }
     }
 
-    useEffect(() => {
-        loadChats()
-},[])
-
     const selectChat = async (chat) => {
         setCurrentChat(chat)
 
