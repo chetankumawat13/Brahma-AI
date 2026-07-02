@@ -10,7 +10,6 @@ const MessageList = () => {
   if(!currentChat) return null;
 
   const chatData = messagesByChat?.[currentChat._id] || []
-  const messages = chatData?.messages || []
 
   
   if(loadingMessages){
@@ -22,7 +21,7 @@ const MessageList = () => {
   return (
     <div className='message-list'>
         {
-          messages.map(message => (
+          chatData.map(message => (
             <Message key={message._id} message={message} />
           ))
         }
