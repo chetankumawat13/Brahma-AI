@@ -7,13 +7,8 @@ import { useChat } from '../hooks/useChat';
 const ChatWindow = () => {
 
 
-  const {currentChat,messagesByChat} = useChat()
+  const {currentChat} = useChat()
 
-  console.log(messagesByChat);
-
-  const messages = messagesByChat[currentChat?._id] || []
-
-  console.log(messages);
 
   return (
     <main className='chat-window'>

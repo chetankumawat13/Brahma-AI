@@ -6,7 +6,7 @@ import ChatHeader from './ChatHeader'
 const ActiveChat = () => {
   return (
     <section className='active-chat'>
-        <MessageList />
+        <MessageList  />
         <PromptBox />
     </section>
   )

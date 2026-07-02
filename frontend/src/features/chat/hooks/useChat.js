@@ -8,7 +8,7 @@ import { getChats, getMessages } from "../service/chat.api";
 export const useChat = () => {
 
     const context = useContext(ChatContext)
-    const {loadingChats,setLoadingChats,chats,setChats,currentChat,setCurrentChat,messagesByChat,setLoadingMessages,setMessagesByChat} = context
+    const {loadingChats,setLoadingChats,chats,setChats,currentChat,setCurrentChat,messagesByChat,loadingMessages,setLoadingMessages,setMessagesByChat} = context
 
 
     const loadChats = async () => {
@@ -71,6 +71,6 @@ export const useChat = () => {
 
 
     return {
-        initializeSocketConnection,loadChats,chats,loadingChats,selectChat,currentChat,messagesByChat
+        initializeSocketConnection,loadChats,chats,loadingChats,selectChat,currentChat,messagesByChat,loadingMessages
     }
 }
