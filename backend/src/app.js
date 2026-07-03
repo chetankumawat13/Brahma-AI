@@ -3,6 +3,8 @@ import authRouter from './routes/auth.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import chatRouter from './routes/chat.routes.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const app = express()
 app.use(express.json())
@@ -11,6 +13,8 @@ app.use(cors({
     credentials:true,
     origin:process.env.FRONTEND_URL
 }))
+
+
 
 
 
