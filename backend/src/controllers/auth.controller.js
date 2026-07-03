@@ -35,6 +35,15 @@ export async function registerController(req,res){
     },process.env.JWT_SECRET)
 
 
+     res.status(201).json({
+        message: "User registered successfully",
+        success: true,
+        user: {
+            id: user._id,
+            username: user.username,
+        }
+    });
+
 
     await sendEmail({
         to: email,
@@ -50,15 +59,7 @@ export async function registerController(req,res){
     })
 
 
-    res.status(201).json({
-        message: "User registered successfully",
-        success: true,
-        user: {
-            id: user._id,
-            username: user.username,
-            email: user.email
-        }
-    });
+   
 
 }
 
