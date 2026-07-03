@@ -15,9 +15,9 @@ const PromptBox = () => {
     if(!message){
       return
     }
-
-    await sendMessages(message)
     reset({ message: '' })
+    await sendMessages(message)
+
   };
 
   return (
