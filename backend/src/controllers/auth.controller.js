@@ -1,176 +1,162 @@
-import userModel from "../models/user.model.js"
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-import { sendEmail } from "../services/mail.services.js"
-dotenv.config()
+import userModel from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { sendEmail } from "../services/mail.services.js";
+dotenv.config();
 
+export async function registerController(req, res) {
+  const { username, email, password } = req.body;
 
+  const isUserAlreadyExist = await userModel.findOne({
+    $or: [{ username }, { email }],
+  });
 
-export async function registerController(req,res){
-    const {username,email,password}  = req.body
-
-    const isUserAlreadyExist = await userModel.findOne({
-        $or:[
-           {username},
-           {email}
-        ]
-    })
-
-    if(isUserAlreadyExist){
-        return res.status(409).json({
-            message:'user already exist with this email and username',
-            success:false,
-            err:'user already exist'
-        })
-    }
-
-
-    const user = await userModel.create({username,email,password})
-
-
-
-    const emailVerificationToken = jwt.sign({
-        email:user.email,
-
-    },process.env.JWT_SECRET)
-
-
-     res.status(201).json({
-        message: "User registered successfully",
-        success: true,
-        user: {
-            id: user._id,
-            username: user.username,
-        }
+  if (isUserAlreadyExist) {
+    return res.status(409).json({
+      message: "user already exist with this email and username",
+      success: false,
+      err: "user already exist",
     });
+  }
 
+  const user = await userModel.create({ username, email, password });
 
-    await sendEmail({
-        to: email,
-        subject: "Welcome to BRAHMA-AI!",
-        html: `
+  const emailVerificationToken = jwt.sign(
+    {
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+  );
+
+  res.status(201).json({
+    message: "User registered successfully",
+    success: true,
+    user: {
+      id: user._id,
+      username: user.username,
+    },
+  });
+
+  await sendEmail({
+    to: email,
+    subject: "Welcome to BRAHMA-AI!",
+    html: `
                 <p>Hi ${username},</p>
                 <p>Thank you for registering at <strong>BRAHMA-AI</strong>. We're excited to have you on board!</p>
                 <p>Please verify your email address by clicking the link below:</p>
                 <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify Email</a>
                 <p>If you did not create an account, please ignore this email.</p>
                 <p>Best regards,<br>The BRAHMA-AI Team</p>
-        `
-    })
-
-
-   
-
+        `,
+  });
 }
 
+export async function loginController(req, res) {
+  const { email, password } = req.body;
 
-export async function loginController(req,res){
-    const {email,password} = req.body
+  const user = await userModel.findOne({ email });
 
-    const user = await userModel.findOne({email})
+  if (!user) {
+    return res.status(400).json({
+      message: "Invalid email or password",
+      success: false,
+      error: "User not found",
+    });
+  }
 
-    if(!user){
-        return res.status(400).json({
-            message:"Invalid email or password",
-            success:false,
-            error:"User not found"
-        })
-    }
+  const isPasswordMatch = await user.comparePassword(password);
 
-    const isPasswordMatch = await user.comparePassword(password);
+  if (!isPasswordMatch) {
+    return res.status(400).json({
+      message: "Invalid email or password",
+      success: false,
+      error: "Incorrect password",
+    });
+  }
 
-    if(!isPasswordMatch){
-        return res.status(400).json({
-            message:"Invalid email or password",
-            success:false,
-            error:"Incorrect password"
-        })
-    }
+  if (!user.verified) {
+    return res.status(400).json({
+      message: "Please verify your email before logging in",
+      success: false,
+      error: "Email Not Verified",
+    });
+  }
 
+  const token = jwt.sign(
+    {
+      id: user._id,
+      username: user.username,
+    },
+    process.env.JWT_SECRET,
+  );
 
-    if(!user.verified){
-        return res.status(400).json({
-            message:"Please verify your email before logging in",
-            success:false,
-            error:"Email Not Verified"
-        })
-    }
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 
-    const token = jwt.sign(
-        {
-            id:user._id,
-            username:user.username
-        },
-        process.env.JWT_SECRET,
-    )
-
-    res.cookie("token",token)
-
-    res.status(200).json({
-        message:"User logged in Successfully",
-        success:true,
-        user:{
-            id:user._id,
-            username:user.username,
-            email:user.email
-        }
-    })
-
+  res.status(200).json({
+    message: "User logged in Successfully",
+    success: true,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
 }
 
-export async function getMeController(req,res){
-    const username = req.user.username
+export async function getMeController(req, res) {
+  const username = req.user.username;
 
-    if(!username){
-        return res.status(404).json({
-            message:"user not found",
-            success:false,
-            err:"user not found"
-        })
-    }
+  if (!username) {
+    return res.status(404).json({
+      message: "user not found",
+      success: false,
+      err: "user not found",
+    });
+  }
 
-    const user = await userModel.findOne({username:username})
+  const user = await userModel.findOne({ username: username });
 
-    res.status(200).json({
-        message:"user fetched successfully",
-        success:true,
-        user:{
-            username:user.username,
-            email:user.email
-        }
-    })
-
-
+  res.status(200).json({
+    message: "user fetched successfully",
+    success: true,
+    user: {
+      username: user.username,
+      email: user.email,
+    },
+  });
 }
 
+export async function verifyEmailController(req, res) {
+  const { token } = req.query;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findOne({ email: decoded.email });
 
-export async function verifyEmailController(req,res){
-    const {token} = req.query
-    try{
-        const decoded = jwt.verify(token,process.env.JWT_SECRET)
-        const user = await userModel.findOne({email:decoded.email})
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid Token",
+        success: false,
+        err: "User not found",
+      });
+    }
 
-        if(!user){
-            return res.status(400).json({
-                message:"Invalid Token",
-                success:false,
-                err:"User not found"
-            })
-        }
-
-        if(user.verified){
-            return res.status(400).send(`
+    if (user.verified) {
+      return res.status(400).send(`
                 <h1>Email Already Verified</h1>
                <p>This verified link expired </p>
-            `)
-        }
+            `);
+    }
 
-        user.verified = true
+    user.verified = true;
 
-        await user.save()
+    await user.save();
 
-
-        const html = `
+    const html = `
                 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -221,20 +207,16 @@ export async function verifyEmailController(req,res){
 
 </body>
 </html>
-        `
+        `;
 
-        return res.send(html)
-    
-    }catch(err){
-        return res.status(400).json({
-            message:"Invalid ad expired token",
-            success:false,
-            err:err.message
-
-        })
-    }
+    return res.send(html);
+  } catch (err) {
+    return res.status(400).json({
+      message: "Invalid ad expired token",
+      success: false,
+      err: err.message,
+    });
+  }
 }
 
-export async function resendEmailController(req,res){
-    
-}
+export async function resendEmailController(req, res) {}
