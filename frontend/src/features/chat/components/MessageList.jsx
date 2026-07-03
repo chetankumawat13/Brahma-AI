@@ -1,15 +1,28 @@
-import React from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useChat } from '../hooks/useChat'
 import Message from './Message';
 
 const MessageList = () => {
   
 
-  const {currentChat,messagesByChat,loadingMessages} = useChat()
+  const {currentChat,messagesByChat,loadingMessages,sending,streaming} = useChat()
+  const messageListRef = useRef(null)
+
+  const chatData = useMemo(() => {
+    if(!currentChat){
+      return []
+    }
+
+    return messagesByChat?.[currentChat._id] || []
+  },[currentChat, messagesByChat])
+
+  useEffect(() => {
+    if(messageListRef.current){
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    }
+  },[chatData, sending])
 
   if(!currentChat) return null;
-
-  const chatData = messagesByChat?.[currentChat._id] || []
 
   
   if(loadingMessages){
@@ -21,11 +34,18 @@ const MessageList = () => {
   
 
   return (
-    <div className='message-list'>
+    <div ref={messageListRef} className='message-list'>
         {
           chatData.map(message => (
             <Message key={message._id} message={message} />
           ))
+        }
+        {
+          sending && !streaming && (
+            <div className='ai-message'>
+              <div className='ai-bubble'>Thinking...</div>
+            </div>
+          )
         }
     </div>
   )
