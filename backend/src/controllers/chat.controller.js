@@ -1,7 +1,12 @@
 import chatModel from "../models/chat.model.js";
 import messageModel from "../models/message.model.js";
 import userModel from "../models/user.model.js";
-import { generateChatTittle, generateResponse } from "../services/ai.service.js";
+import { generateChatTittle, generateResponse, streamResponse } from "../services/ai.service.js";
+
+function streamEvent(res, event, payload){
+    res.write(`event: ${event}\n`)
+    res.write(`data: ${JSON.stringify(payload)}\n\n`)
+}
 
 
 export async function sendMessage(req,res){
@@ -42,6 +47,62 @@ export async function sendMessage(req,res){
         message
     })
 
+}
+
+export async function sendMessageStream(req,res){
+    const {message,chatId} = req.body
+
+    let title = null, chat = null
+
+    res.setHeader("Content-Type", "text/event-stream")
+    res.setHeader("Cache-Control", "no-cache")
+    res.setHeader("Connection", "keep-alive")
+
+    try{
+        if(!chatId){
+            title = await generateChatTittle(message)
+            chat = await chatModel.create({
+                user:req.user.id,
+                title
+            })
+
+            streamEvent(res, "meta", {
+                chat,
+                title
+            })
+        }
+
+        await messageModel.create({
+            chat:chatId || chat._id,
+            content:message,
+            role:"user"
+        })
+
+        const messages = await messageModel.find({chat:chatId || chat._id})
+
+        const fullResponse = await streamResponse(messages, (token) => {
+            streamEvent(res, "token", { token })
+        })
+
+        const aiMessage = await messageModel.create({
+            chat:chatId || chat._id,
+            content:fullResponse,
+            role:"ai"
+        })
+
+        streamEvent(res, "done", {
+            chat,
+            title,
+            aiMessage,
+            message
+        })
+        res.end()
+    }catch(err){
+        streamEvent(res, "error", {
+            message: err.message || "Streaming failed"
+        })
+        res.end()
+    }
 }
 
 export async function getMe(req,res){

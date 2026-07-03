@@ -8,19 +8,80 @@ const llm = new ChatMistralAI({
     // other params...
 })
 
+function mapToLangChainMessage(msg){
+    if(msg.role == "user"){
+        return new HumanMessage(msg.content)
+    }
+
+    if(msg.role == "ai"){
+        return new AIMessage(msg.content)
+    }
+
+    return null
+}
+
+function extractChunkText(chunk){
+    if(!chunk){
+        return ""
+    }
+
+    if(typeof chunk.content === "string"){
+        return chunk.content
+    }
+
+    if(Array.isArray(chunk.content)){
+        return chunk.content
+            .map((item) => {
+                if(typeof item === "string"){
+                    return item
+                }
+
+                if(item && typeof item.text === "string"){
+                    return item.text
+                }
+
+                return ""
+            })
+            .join("")
+    }
+
+    return ""
+}
+
 
 
 export async function generateResponse(messages){
 
-    const response = await llm.invoke(messages.map(msg => {
-        if(msg.role == "user"){
-            return new HumanMessage(msg.content)
-        }else if(msg.role == "ai"){
-            return new AIMessage(msg.content)
-        }
-    }));
+    const response = await llm.invoke(
+        messages
+            .map(mapToLangChainMessage)
+            .filter(Boolean)
+    );
 
     return response.text
+}
+
+export async function streamResponse(messages, onToken){
+    let fullResponse = ""
+
+    const stream = await llm.stream(
+        messages
+            .map(mapToLangChainMessage)
+            .filter(Boolean)
+    )
+
+    for await (const chunk of stream){
+        const token = extractChunkText(chunk)
+
+        if(!token){
+            continue
+        }
+
+        fullResponse += token
+        onToken(token)
+    }
+
+    return fullResponse
 }
 
 export async function generateChatTittle(message){
