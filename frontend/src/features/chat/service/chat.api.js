@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL:"http://localhost:3000/api",
+    baseURL:`${import.meta.env.VITE_BACKEND_URL}/api`,
     withCredentials:true
 })
 
@@ -52,7 +52,7 @@ function parseSSEChunk(chunk){
 }
 
 export async function sendMessageStream({ message, chatId, onMeta, onToken, onDone, onError }){
-    const response = await fetch('http://localhost:3000/api/chats/message/stream', {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chats/message/stream`, {
         method: 'POST',
         credentials: 'include',
         headers: {
