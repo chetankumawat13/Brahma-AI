@@ -27,7 +27,11 @@ export const MainRouter = createBrowserRouter([
             {
                 path:'/',
                 element:<Dashboard />
-            }
+            },
+            {
+                path:'/c/:id',
+                element:<Dashboard />
+            },
         ]
     }
 ])
