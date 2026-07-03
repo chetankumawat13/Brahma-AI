@@ -1,6 +1,8 @@
 .chat-layout{
     display: flex;
     height: 100vh;
+    position: relative;
+    overflow: hidden;
 }
 
 .sidebar{
@@ -11,11 +13,32 @@
     flex-direction: column;
     padding: 0 var(--padding-sm);
     gap: var(--gutter-sm);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    will-change: transform;
+    z-index: 20;
 
     .sidebar-header{
         padding: var(--padding-md) var(--padding-sm);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--gutter-sm);
+
         img{
             width: 2.5rem;
+        }
+
+        .sidebar-close-button{
+            display: none;
+            border: none;
+            background: transparent;
+            color: var(--text-primary-color);
+            font-size: 1.4rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
         }
     }
 
@@ -161,14 +184,29 @@
     display: flex;
     flex-direction: column;
     background-color: var(--bg-primary-color);
+    min-width: 0;
 }
 
 .chat-header{
     height: 70px;
     display: flex;
     align-items: center;
+    gap: var(--gutter-sm);
     padding: 0 var(--padding-lg);
     background-color: transparent;
+
+    .chat-menu-button{
+        display: none;
+        border: none;
+        background: transparent;
+        color: var(--text-color);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
 }
 
 .chat-header h2{
@@ -189,7 +227,7 @@
 .active-chat{
     flex: 1;
     display: flex;
-    width: 80vw;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
@@ -266,8 +304,11 @@
     display: flex;
     justify-content: flex-start;
     margin: 18px 0;
+    width: 100%;
+
     .ai-bubble{
-        max-width: 70%;
+        width: 100%;
+        max-width: 100%;
         padding: var(--padding-sm) var(--padding-md);
         font-size: 0.9rem;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -341,14 +382,105 @@
 
 .ai-bubble,
 .user-bubble{
-    width: fit-content;
     max-width: 720px;
+}
+
+.ai-bubble{
+    max-width: 100%;
 }
 
 
 
 a.active{
     background-color: #e1e1e1;
+}
+
+.sidebar-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 15, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 15;
+}
+
+.sidebar-overlay-active{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px){
+    .chat-layout{
+        height: 100dvh;
+    }
+
+    .sidebar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(84vw, 320px);
+        transform: translateX(-102%);
+        box-shadow: 18px 0 40px rgba(0, 0, 0, 0.18);
+        z-index: 25;
+        padding-top: 0.25rem;
+    }
+
+    .sidebar.sidebar-open{
+        transform: translateX(0);
+    }
+
+    .sidebar .sidebar-header .sidebar-close-button{
+        display: inline-flex;
+    }
+
+    .chat-header{
+        padding: 0 var(--padding-md);
+
+        .chat-menu-button{
+            display: inline-flex;
+        }
+
+        h2{
+            font-size: var(--font-size-md);
+        }
+    }
+
+    .active-chat{
+        padding-bottom: var(--padding-sm);
+    }
+
+    .message-list{
+        padding: var(--padding-sm) var(--padding-md);
+    }
+
+    .prompt-box{
+        width: calc(100% - 1.5rem);
+        margin: 0 0.75rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px){
+    .sidebar{
+        width: 250px;
+    }
+
+    .chat-header{
+        padding: 0 var(--padding-md);
+
+        h2{
+            font-size: var(--font-size-md);
+        }
+    }
+
+    .message-list{
+        padding: var(--padding-md) var(--padding-lg);
+    }
+
+    .prompt-box{
+        width: 86%;
+    }
 }
 
 

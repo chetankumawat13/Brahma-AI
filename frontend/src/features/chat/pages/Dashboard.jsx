@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useChat } from '../hooks/useChat'
 import SideBar from '../components/SideBar'
 import ChatWindow from '../components/ChatWindow'
@@ -9,11 +9,26 @@ const Dashboard = () => {
 
     const { id } = useParams()
     const { initializeSocketConnection, loadChats, chats, selectChat, setCurrentChat } = useChat()
+    const [sidebarOpen, setSidebarOpen] = useState(true)
+    const [isMobile, setIsMobile] = useState(false)
+
+    useEffect(() => {
+      const syncViewportState = () => {
+        const mobile = window.innerWidth <= 768
+        setIsMobile(mobile)
+        setSidebarOpen(!mobile)
+      }
+
+      syncViewportState()
+      window.addEventListener('resize', syncViewportState)
+
+      return () => window.removeEventListener('resize', syncViewportState)
+    }, [])
      
-        useEffect(() => {
-          initializeSocketConnection()
-          loadChats()
-            },[initializeSocketConnection, loadChats])
+    useEffect(() => {
+      initializeSocketConnection()
+      loadChats()
+    }, [initializeSocketConnection, loadChats])
 
     useEffect(() => {
         if(!id){
@@ -28,10 +43,23 @@ const Dashboard = () => {
         }
     },[id, chats, selectChat, setCurrentChat])
 
+    const closeSidebar = () => {
+      if(isMobile){
+        setSidebarOpen(false)
+      }
+    }
+
   return (
     <div className='chat-layout'>
-        <SideBar />
-        <ChatWindow />
+        {isMobile && sidebarOpen && (
+          <div
+            className='sidebar-overlay sidebar-overlay-active'
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden='true'
+          />
+        )}
+        <SideBar isOpen={sidebarOpen} onClose={closeSidebar} />
+        <ChatWindow onOpenSidebar={() => setSidebarOpen(true)} />
     </div>
   )
 }

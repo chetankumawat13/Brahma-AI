@@ -5,13 +5,13 @@ import SearchChat from './SearchChat'
 import RecentChats from './RecentChats'
 import UserProfile from './UserProfile'
 
-const SideBar = () => {
+const SideBar = ({ isOpen, onClose }) => {
   return (
-    <aside className='sidebar'>
-        <SidebarHeader />
-        <NewChatButton />
+    <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
+        <SidebarHeader onClose={onClose} />
+        <NewChatButton onClose={onClose} />
         <SearchChat />
-        <RecentChats />
+        <RecentChats onClose={onClose} />
         <UserProfile />
     </aside>
   )

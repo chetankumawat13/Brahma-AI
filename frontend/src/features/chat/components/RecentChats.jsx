@@ -2,7 +2,7 @@ import React from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "../hooks/useChat";
 
-const RecentChats = () => {
+const RecentChats = ({ onClose }) => {
 
 
   const {chats,loadingChats} = useChat()
@@ -18,7 +18,7 @@ const RecentChats = () => {
         <h4>Recents</h4>
         {
             chats.map(chat => (
-                <ChatItem key={chat._id} chat={chat} />
+                <ChatItem key={chat._id} chat={chat} onClose={onClose} />
             ))
         } 
   </div>;

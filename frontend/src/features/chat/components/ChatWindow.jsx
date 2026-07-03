@@ -4,7 +4,7 @@ import EmptyChat from './EmptyChat'
 import ActiveChat from './ActiveChat';
 import { useChat } from '../hooks/useChat';
 
-const ChatWindow = () => {
+const ChatWindow = ({ onOpenSidebar }) => {
 
 
   const {currentChat} = useChat()
@@ -12,7 +12,7 @@ const ChatWindow = () => {
 
   return (
     <main className='chat-window'>
-        <ChatHeader />
+        <ChatHeader onOpenSidebar={onOpenSidebar} />
        {
         currentChat ? <ActiveChat /> : <EmptyChat />
        }
