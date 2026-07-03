@@ -198,3 +198,19 @@
 
 }
 
+
+
+
+@media  (max-width: 768px){
+    .form-container{
+        width: 100%;
+        padding: var(--padding-md);
+        height: 100vh;
+        border: none;
+
+        
+        
+    }  
+
+    
+}

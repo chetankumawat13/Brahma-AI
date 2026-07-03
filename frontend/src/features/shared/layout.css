@@ -7,6 +7,7 @@
     h1{
         font-size: var(--font-size-xl);
         font-family: 'Brahma-Regular';
+
     }
     .auth-component{
         width: 100%;
@@ -14,5 +15,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+
+@media  (max-width: 768px){
+
+    .auth-layout{
+        padding: var(--padding-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    h1{
+        display: none;
+    }
+
+    .auth-component{
+        height: 100vh;
+        background-color: yellow;
     }
 }
