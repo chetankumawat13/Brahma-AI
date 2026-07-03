@@ -1,8 +1,7 @@
 import React from 'react'
-import MarkdownRenderer from "./MarkdownRenderer";
+import MarkdownRenderer from './MarkdownRenderer';
 
 const AiMessage = ({message}) => {
-    console.log(message);
   return (
     <div className='ai-message'>
         <div className="ai-bubble">
@@ -15,3 +14,4 @@ const AiMessage = ({message}) => {
 }
 
 export default AiMessage
+
