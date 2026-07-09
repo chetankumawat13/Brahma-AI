@@ -8,6 +8,7 @@ const Register = () => {
   const [step, setStep] = useState(1);
   const [canResend, setCanResend] = useState(false);
   const [timer, setTimer] = useState(30);
+  const [submittedEmail, setSubmittedEmail] = useState('');
 
   const {user,loading,handleRegister} = useAuth()
   const {handleSubmit,register} = useForm()
@@ -41,6 +42,7 @@ const Register = () => {
   const handleSubmitRegister = async (data) => {
         try{
             setError('')
+        setSubmittedEmail(data.email)
             await handleRegister(data.email,data.username,data.password)
             setStep(3)
         }catch(err){
@@ -106,7 +108,7 @@ const Register = () => {
               </div>
               <h3>Check Your Email </h3>
               <p>We've sent a verification link to </p>
-              <span>chetan@gmail.com</span>
+              <span>{submittedEmail}</span>
               <button
                 onClick={handleResend}
                 disabled={!canResend}
