@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { AIMessage, HumanMessage } from "@langchain/core/messages"
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { ChatGroq } from "@langchain/groq"
 
 const llm = new ChatGroq({
@@ -85,7 +85,7 @@ export async function streamResponse(messages, onToken){
     return fullResponse
 }
 
-export function generateChatTitle(message){
+function createFallbackTitle(message){
     const words = message
         .replace(/\s+/g, " ")
         .trim()
@@ -93,6 +93,28 @@ export function generateChatTitle(message){
         .slice(0, 5)
 
     return words.length ? words.join(" ") : "New Chat"
+}
+
+export async function generateChatTitle(message){
+    try{
+        const response = await llm.invoke([
+            new SystemMessage(
+                "Generate a concise, descriptive title for this conversation. " +
+                "Return only 2-5 words, with no quotes, punctuation, or explanation."
+            ),
+            new HumanMessage(message)
+        ])
+
+        const title = response.text
+            ?.replace(/["'\n]/g, "")
+            .replace(/[.,!?;:]+$/g, "")
+            .trim()
+
+        return title || createFallbackTitle(message)
+    }catch(err){
+        console.error("Chat title generation failed:", err.message)
+        return createFallbackTitle(message)
+    }
 }
 
 export function getAIErrorMessage(error){

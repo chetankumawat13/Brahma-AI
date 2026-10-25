@@ -14,7 +14,7 @@ export async function sendMessage(req,res){
     let title = null,chat = null;
 
     if(!chatId){
-        title = generateChatTitle(message)
+        title = await generateChatTitle(message)
         chat = await chatModel.create({
             user:req.user.id,
             title
@@ -59,7 +59,7 @@ export async function sendMessageStream(req,res){
 
     try{
         if(!chatId){
-            title = generateChatTitle(message)
+            title = await generateChatTitle(message)
             chat = await chatModel.create({
                 user:req.user.id,
                 title
