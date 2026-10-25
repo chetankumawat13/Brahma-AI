@@ -1,11 +1,12 @@
-import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
-import { ChatMistralAI } from "@langchain/mistralai"
+import "dotenv/config"
+import { AIMessage, HumanMessage } from "@langchain/core/messages"
+import { ChatGroq } from "@langchain/groq"
 
-const llm = new ChatMistralAI({
-    model: "mistral-small-latest",
+const llm = new ChatGroq({
+    apiKey: process.env.GROQ_API_KEY,
+    model: "llama-3.3-70b-versatile",
     temperature: 0,
-    maxRetries: 2,
-    // other params...
+    maxRetries: 0
 })
 
 function mapToLangChainMessage(msg){
@@ -84,14 +85,20 @@ export async function streamResponse(messages, onToken){
     return fullResponse
 }
 
-export async function generateChatTittle(message){
-    const response = await llm.invoke([
-        new SystemMessage(`You are a helpful assistant that generates concise and descriptive titles for chat conversations.
-            
-            User will provide you with the first message of a chat conversation, and you will generate a title that captures the essence of the conversation in 2-4 words. The title should be clear, relevant, and engaging, giving users a quick understanding of the chat's topic. `),
-        new HumanMessage(`Generate a title for a chat conversation based on the following first message:
-            "${message}"`)
-    ])
- 
-    return response.text
+export function generateChatTitle(message){
+    const words = message
+        .replace(/\s+/g, " ")
+        .trim()
+        .split(" ")
+        .slice(0, 5)
+
+    return words.length ? words.join(" ") : "New Chat"
+}
+
+export function getAIErrorMessage(error){
+    if(error?.status === 429 || error?.code === 429 || error?.error?.code === 1300){
+        return "Groq is rate-limited right now. Please wait a moment and try again."
+    }
+
+    return error?.message || "The Groq AI service is unavailable. Please try again."
 }

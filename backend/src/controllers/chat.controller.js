@@ -1,7 +1,6 @@
 import chatModel from "../models/chat.model.js";
 import messageModel from "../models/message.model.js";
-import userModel from "../models/user.model.js";
-import { generateChatTittle, generateResponse, streamResponse } from "../services/ai.service.js";
+import { generateChatTitle, generateResponse, getAIErrorMessage, streamResponse } from "../services/ai.service.js";
 
 function streamEvent(res, event, payload){
     res.write(`event: ${event}\n`)
@@ -15,7 +14,7 @@ export async function sendMessage(req,res){
     let title = null,chat = null;
 
     if(!chatId){
-        title = await generateChatTittle(message)
+        title = generateChatTitle(message)
         chat = await chatModel.create({
             user:req.user.id,
             title
@@ -60,7 +59,7 @@ export async function sendMessageStream(req,res){
 
     try{
         if(!chatId){
-            title = await generateChatTittle(message)
+            title = generateChatTitle(message)
             chat = await chatModel.create({
                 user:req.user.id,
                 title
@@ -99,7 +98,7 @@ export async function sendMessageStream(req,res){
         res.end()
     }catch(err){
         streamEvent(res, "error", {
-            message: err.message || "Streaming failed"
+            message: getAIErrorMessage(err)
         })
         res.end()
     }
